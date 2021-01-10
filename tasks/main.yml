@@ -1,0 +1,55 @@
+---
+- name: install required packages
+  package:
+    name:
+      - ocserv
+    state: latest
+    update_cache: yes
+    autoremove: yes
+    autoclean: yes
+
+- name: copy openconnect config file
+  template:
+    src: ocserv.conf.j2
+    dest: /etc/ocserv/ocserv.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart ocserv service
+
+- name: enable nat on iptables
+  iptables:
+    action: append
+    chain: POSTROUTING
+    ip_version: ipv4
+    state: present
+    table: nat
+    jump: MASQUERADE
+  notify:
+    - persist iptables rules
+
+- name: create necessary accounts
+  shell: "echo '{{ item.password }}' | ocpasswd -c /etc/ocserv/ocpasswd.conf {{ item.user }}"
+  with_items: "{{ openconnect_accounts }}"
+  notify:
+    - restart ocserv service
+  register: output
+
+- name: check if dhparam file exists
+  stat:
+    path: /etc/ssl/dhparam.pem
+  register: dhparam_existence
+
+- name: create dhparam file if it doesnt exists
+  shell: openssl dhparam -out /etc/ssl/dhparam.pem 2048
+  when: not dhparam_existence.stat.exists
+
+- name: enable ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present
+    sysctl_set: yes
+    reload: yes
+    sysctl_file: /etc/sysctl.conf

@@ -1,0 +1,3 @@
+openconnect_accounts:
+  - user: username
+    password: 123456

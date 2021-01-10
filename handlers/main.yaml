@@ -1,0 +1,9 @@
+---
+- name: restart ocserv service
+  systemd:
+    name: ocserv
+    state: restarted
+    enabled: yes
+
+- name: persist iptables rules
+  shell: iptables-save > /etc/iptables/rules.v4

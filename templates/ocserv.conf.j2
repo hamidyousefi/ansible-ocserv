@@ -1,0 +1,61 @@
+auth                    = "plain[/etc/ocserv/ocpasswd.conf]"
+
+listen-host             = {{ ansible_host }}
+tcp-port                = 443
+udp-port                = 443
+
+run-as-user             = nobody
+run-as-group            = daemon
+
+default-domain          = {{ host_fqdn_domain }}
+
+socket-file             = /run/ocserv.socket
+server-cert             = /etc/letsencrypt/live/{{ host_fqdn_domain }}/fullchain.pem
+server-key              = /etc/letsencrypt/live/{{ host_fqdn_domain }}/privkey.pem
+dh-params               = /etc/ssl/dhparam.pem
+ca-cert                 = /etc/letsencrypt/live/{{ host_fqdn_domain }}/cert.pem
+
+isolate-workers         = true
+max-clients             = 128
+max-same-clients        = 2
+
+server-stats-reset-time = 604800
+keepalive               = 300
+
+dpd                     = 60
+mobile-dpd              = 300
+
+switch-to-tcp-timeout   = 30
+try-mtu-discovery       = true
+cert-user-oid           = 0.9.2342.19200300.100.1.1
+
+compression             = true
+no-compress-limit       = 256
+
+tls-priorities          = "NORMAL:%SERVER_PRECEDENCE:%COMPAT:-RSA:-VERS-SSL3.0:-ARCFOUR-128"
+
+auth-timeout            = 240
+idle-timeout            = 1200
+mobile-idle-timeout     = 1800
+min-reauth-time         = 3
+max-ban-score           = 50
+ban-reset-time          = 300
+
+cookie-timeout          = 300
+deny-roaming            = false
+rekey-time              = 172800
+rekey-method            = ssl
+use-occtl               = true
+pid-file                = /run/ocserv.pid
+net-priority            = 6
+device                  = vpns
+predictable-ips         = true
+default-domain          = {{ host_fqdn_domain }}
+ipv4-network            = 192.168.100.0/24
+ipv4-netmask            = 255.255.255.0
+tunnel-all-dns          = true
+dns                     = 8.8.8.8
+dns                     = 1.1.1.1
+ping-leases             = true
+cisco-client-compat     = true
+dtls-legacy             = true

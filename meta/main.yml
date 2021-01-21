@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: ocserv
+  author: Hamid Yousefi
+  description: OpenConnect VPN Server
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.8
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+        - buster
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+        - focal
+  galaxy_tags:
+    - linux
+    - vpn
+    - openconnect
+    - system

@@ -1,3 +1,8 @@
-openconnect_accounts:
+ocserv_dns_list:
+  - '8.8.8.8'
+  - '1.1.1.1'
+ocserv_routes: []
+ocserv_fqdn_hostname: vpn.domain.site
+ocserv_accounts:
   - user: username
     password: 123456

@@ -31,7 +31,7 @@
 
 - name: create necessary accounts
   shell: "echo '{{ item.password }}' | ocpasswd -c /etc/ocserv/ocpasswd.conf {{ item.user }}"
-  with_items: "{{ openconnect_accounts }}"
+  with_items: "{{ ocserv_accounts }}"
   notify:
     - restart ocserv service
   register: output

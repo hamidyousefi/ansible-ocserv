@@ -7,13 +7,13 @@ udp-port                = 443
 run-as-user             = nobody
 run-as-group            = daemon
 
-default-domain          = {{ host_fqdn_domain }}
+default-domain          = {{ ocserv_fqdn_hostname }}
 
 socket-file             = /run/ocserv.socket
-server-cert             = /etc/letsencrypt/live/{{ host_fqdn_domain }}/fullchain.pem
-server-key              = /etc/letsencrypt/live/{{ host_fqdn_domain }}/privkey.pem
-dh-params               = /etc/ssl/dhparam.pem
-ca-cert                 = /etc/letsencrypt/live/{{ host_fqdn_domain }}/cert.pem
+server-cert             = /etc/certificates/{{ ocserv_fqdn_hostname }}/fullchain.pem
+server-key              = /etc/certificates/{{ ocserv_fqdn_hostname }}/privkey.pem
+dh-params               = /etc/certificates/dhparams.pem
+ca-cert                 = /etc/certificates/{{ ocserv_fqdn_hostname }}/cert.pem
 
 isolate-workers         = true
 max-clients             = 128
@@ -50,12 +50,17 @@ pid-file                = /run/ocserv.pid
 net-priority            = 6
 device                  = vpns
 predictable-ips         = true
-default-domain          = {{ host_fqdn_domain }}
+default-domain          = {{ ocserv_fqdn_hostname }}
 ipv4-network            = 192.168.100.0/24
 ipv4-netmask            = 255.255.255.0
 tunnel-all-dns          = true
-dns                     = 8.8.8.8
-dns                     = 1.1.1.1
+{% for dns in ocserv_dns_list %}
+dns                     = {{ dns }}
+{% endfor %}
 ping-leases             = true
 cisco-client-compat     = true
 dtls-legacy             = true
+
+{% for route in ocserv_routes %}
+route                   = {{ route }}
+{% endfor %}
